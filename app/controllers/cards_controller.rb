@@ -1,6 +1,9 @@
 class CardsController < ApplicationController
   def index
-    board = Board.find_by(id: params[:board_id])
+    board = Board.find_by(name: params[:board_name])
+    if board.nil?
+      board = Board.create_new_board(params[:board_name])
+    end
 
     if board
       @cards = board.cards
@@ -10,13 +13,13 @@ class CardsController < ApplicationController
   end
 
   def show
-    @card = Card.find_by(board_id: params[:board_id], id: params[:id])
+    @card = Card.find_by(id: params[:id])
     render json: {ok: false, cause: :not_found}, status: :not_found if !@card
 
   end
 
   def destroy
-    @card = Card.find_by(board_id: params[:board_id], id: params[:id])
+    @card = Card.find_by(id: params[:id])
 
     if @card
       @card.destroy
@@ -26,7 +29,14 @@ class CardsController < ApplicationController
   end
 
   def create
-    @card = Card.create(card_params)
+    @card = Card.new(card_params)
+
+    @card.board = Board.find_by(name: params[:board_name])
+    if @card.board.nil?
+      @card.board = Board.create_new_board params[:board_name]
+    end
+
+    @card.save
 
     if !@card.valid?
       render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
@@ -35,6 +45,7 @@ class CardsController < ApplicationController
 
   def update
     @card = Card.find_by(id: params[:id])
+    @card.board = Board.find_by(name: params[:board_name])
     @card.update(card_params)
 
     if !@card.valid?
@@ -44,6 +55,6 @@ class CardsController < ApplicationController
 
   private
     def card_params
-      return params.permit(:title, :content, :image_url, :board_id)
+      return params.permit(:text, :emoji)
     end
 end

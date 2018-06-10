@@ -3,40 +3,37 @@
 This API is intended for use with our second React project Ada's Inpiration Board.
 
 ## Retrieve Data
-  - **Retrieve list of all Boards:** http://localhost:3000/boards
+  - **Retrieve list of all Boards:** https://inspiration-board.herokuapp.com/boards
 
-  - **Retrieve list of cards for a single board From ID:** http://localhost:3000/boards/1
+  - **Retrieve list of cards for a single board From Name:** https://inspiration-board.herokuapp.com/boards/Ada-Lovelace/cards
+    - **Note** if a board with the given `board_name` does not exist, it will be created
 
-  - **Retrieve specific card:** http://localhost:3000/boards/:board_id/cards/:card_id
+  - **Retrieve specific card:** https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
 
 ## Send Data
 
   - **Create a board:**
-    - POST http://localhost:3000/boards
+    - POST https://inspiration-board.herokuapp.com/boards
     - accepted params:
       - name (string)
 
   - **Add a New Card:**
-    - POST http://localhost:3000/boards/:board_id/cards
+    - POST https://inspiration-board.herokuapp.com/boards/:board_name/cards
     - accepted params:
-      - title (string)
-      - content (string)
-      - image_url (string)
+      - text (string)
+      - emoji (string)
+    - **Note** if a board with the given name does not exist it will be created
 
 ## Update Data
 
-- **Update a board**
-  - PATCH http://localhost:3000/boards/:board_id
-    - name (string)
-
 - **Update a card**
-  - PATCH http://localhost:3000/boards/:board_id/cards/:card_id
-  - title (string)
-  - content (string)
-  - image_url (string)
+  - PATCH https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
+  - text (string)
+  - emoji (string)
+  - **NOTE** if the given board name does not exist it will be created.
 
 ## Delete Data
 - **Delete a board, warning destroys all card data for that board**
-  - DELETE http://localhost:3000/boards/:board_id
+  - DELETE https://inspiration-board.herokuapp.com/boards/:board_name
 - **Delete a card**
-  - DELETE http://localhost:3000/boards/:board_id/cards/:card_id
+  - DELETE https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id

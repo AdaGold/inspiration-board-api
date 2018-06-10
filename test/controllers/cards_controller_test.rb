@@ -5,12 +5,25 @@ describe CardsController do
 
   it "should get index" do
     # Act
-    get board_cards_path(board.id)
+    get board_cards_path(board.name)
 
     # Assert
     expect(response).must_be :successful?
     expect(response.header['Content-Type']).must_include 'json'
 
+  end
+
+  it "will create a board if using a board name that doesn't exist" do
+
+    # Act
+    get board_cards_path("pasta")
+    body = JSON.parse(response.body)
+
+    # Assert
+    expect(Board.find_by(name: "pasta")).wont_be_nil
+    expect(response.header['Content-Type']).must_include 'json'
+    expect(body).must_be_instance_of Array
+    expect(body.length).must_equal Board.first.cards.length
   end
 
   describe "show" do
@@ -19,7 +32,7 @@ describe CardsController do
       card = board.cards.first
 
       # Act
-      get board_card_path(board.id, card.id)
+      get board_card_path(board.name, card.id)
 
       # Assert
       expect(response).must_be :successful?
@@ -31,7 +44,7 @@ describe CardsController do
       card.destroy
 
       # Act
-      get board_card_path(board.id, card.id)
+      get board_card_path(board.name, card.id)
       body = JSON.parse(response.body)
 
       # Assert
@@ -46,15 +59,16 @@ describe CardsController do
       # Arrange
       card = board.cards.first
 
+
       # Act
-      delete board_card_path(board.id, card.id)
+      delete board_card_path(board.name, card.id)
       body = JSON.parse(response.body)
 
       # Assert
       expect(response).must_be :successful?
       expect(response.header['Content-Type']).must_include 'json'
       expect(body.keys).must_include "card"
-      ["id", "title", "content", "image_url"].each do |field|
+      ["id", "text", "emoji"].each do |field|
         expect(body["card"].keys).must_include field
       end
 
@@ -66,7 +80,7 @@ describe CardsController do
       card.destroy
 
       # Act
-      delete board_card_path(board.id, card.id)
+      delete board_card_path(board.name, card.id)
       body = JSON.parse(response.body)
 
       # Assert
@@ -83,18 +97,18 @@ describe CardsController do
     it "should get create" do
       # Arrange
       card = {
-        title: "You are totally awesome",
-        board_id: board.id
+        text: "You are totally awesome",
+        board_name: board.name
       }
 
       # Act
-      post board_cards_path(board.id), params: card
+      post board_cards_path(board.name), params: card
       body = JSON.parse(response.body)
 
       value(response).must_be :successful?
       expect(response.header['Content-Type']).must_include 'json'
       expect(body.keys).must_include "card"
-      ["id", "title", "content", "image_url"].each do |field|
+      ["id", "text", "emoji"].each do |field|
         expect(body["card"].keys).must_include field
         if (!card[field].nil?)
           expect(body["card"][field]).must_equal card[field.to_sym] if field != "id"
@@ -108,7 +122,7 @@ describe CardsController do
       }
 
       # Act
-      post board_cards_path(board.id), params: card
+      post board_cards_path(board.name), params: card
       body = JSON.parse(response.body)
 
       value(response).must_be :bad_request?
@@ -119,8 +133,8 @@ describe CardsController do
 
       expect(body["ok"]).must_equal false
       expect(body["cause"]).must_equal "validation errors"
-      expect(body["errors"].keys).must_include "title"
-      expect(body["errors"]["title"]).must_include "can't be blank"
+      expect(body["errors"].keys).must_include "text"
+      expect(body["errors"]["text"]).must_include "invalid text or missing emoji"
     end
   end
 
@@ -129,11 +143,11 @@ describe CardsController do
     it "can update a card" do
       # Arrange
       card = boards(:adas).cards.first
-      card.title = "testing!"
+      card.text = "testing!"
       card_hash = card.as_json
 
       # Act
-      patch board_card_path(board.id, card.id), params: card_hash
+      patch board_card_path(board.name, card.id), params: card_hash
       body = JSON.parse(response.body)
 
       # Assert
@@ -141,17 +155,17 @@ describe CardsController do
       expect(response.header['Content-Type']).must_include 'json'
       expect(body.keys).must_include "card"
       expect(body["card"].keys).must_include "id"
-      expect(body["card"]["title"]).must_equal card.title
+      expect(body["card"]["text"]).must_equal card.text
     end
 
     it "will report errors if it can't update a card" do
       # Arrange
       card = boards(:adas).cards.first
-      card.title = ""
+      card.text = ""
       card_hash = card.as_json
 
       # Act
-      patch board_card_path(board.id, card.id), params: card_hash
+      patch board_card_path(board.name, card.id), params: card_hash
       body = JSON.parse(response.body)
 
       # Assert
@@ -163,8 +177,8 @@ describe CardsController do
 
       expect(body["ok"]).must_equal false
       expect(body["cause"]).must_equal "validation errors"
-      expect(body["errors"].keys).must_include "title"
-      expect(body["errors"]["title"]).must_include "can't be blank"
+      expect(body["errors"].keys).must_include "text"
+      expect(body["errors"]["text"]).must_include "invalid text or missing emoji"
     end
   end
 

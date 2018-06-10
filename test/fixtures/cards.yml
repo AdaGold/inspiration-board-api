@@ -1,13 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  content: MyString
-  image_url: MyString
+  text: MyString
   board: adas
 
 two:
-  title: MyString
-  content: MyString
-  image_url: MyString
+  text: MyString
   board: adas

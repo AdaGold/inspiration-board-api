@@ -34,25 +34,21 @@ describe BoardsController do
   describe "show" do
     it "can retrieve a valid board" do
       # Act
-      get board_path(boards(:adas).id)
+      get board_path(boards(:adas).name)
 
       # Assert
       expect(response).must_be :successful?
     end
 
-    it "responds with not_found if given an invalid id" do
-      # Arrange
-      adas = boards(:adas)
-      adas.destroy_board
+    it "responds by creating a board if the board name isn't in the DB" do
       # Act
-      get board_path(adas.id)
+      get board_path('new-board')
       body = JSON.parse(response.body)
 
       # Assert
-      expect(response).must_be :not_found?
+      expect(response).must_be :successful?
       expect(response.header['Content-Type']).must_include 'json'
-      expect(body["ok"]).must_equal false
-      expect(body["cause"]).must_equal "not_found"
+      expect(Board.find_by(name: 'new-board')).wont_be_nil
     end
   end
 
@@ -113,7 +109,7 @@ describe BoardsController do
       adas = boards(:adas)
 
       # Act
-      delete board_path(adas)
+      delete board_path(adas.name)
       body = JSON.parse(response.body)
 
       # Assert
@@ -139,50 +135,6 @@ describe BoardsController do
       expect(response.header['Content-Type']).must_include 'json'
       expect(body["ok"]).must_equal false
       expect(body["cause"]).must_equal "not_found"
-    end
-  end
-
-  describe "update" do
-
-    it "can update a board" do
-      # Arrange
-      board = boards(:adas)
-      board.name = "testing!"
-      board_hash = board.as_json
-
-      # Act
-      patch board_path(board.id), params: board_hash
-      body = JSON.parse(response.body)
-
-      # Assert
-      expect(response).must_be :successful?
-      expect(response.header['Content-Type']).must_include 'json'
-      expect(body.keys).must_include "board"
-      expect(body["board"].keys).must_include "id"
-      expect(body["board"]["name"]).must_equal board.name
-    end
-
-    it "will report errors if it can't update a board" do
-      # Arrange
-      board = boards(:adas)
-      board.name = ""
-      board_hash = board.as_json
-
-      # Act
-      patch board_path(board.id), params: board_hash
-      body = JSON.parse(response.body)
-
-      # Assert
-      expect(response).must_be :bad_request?
-      expect(response.header['Content-Type']).must_include 'json'
-      ["ok", "cause", "errors"].each do |key|
-        expect(body.keys).must_include key
-      end
-
-      expect(body["ok"]).must_equal false
-      expect(body["cause"]).must_equal "validation errors"
-      expect(body["errors"].keys).must_include "name"
-      expect(body["errors"]["name"]).must_include "can't be blank"
     end
   end
 
