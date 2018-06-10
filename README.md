@@ -30,7 +30,6 @@ This API is intended for use with our second React project Ada's Inpiration Boar
   - PATCH https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
   - text (string)
   - emoji (string)
-  - **NOTE** if the given board name does not exist it will be created.
 
 ## Delete Data
 - **Delete a board, warning destroys all card data for that board**
