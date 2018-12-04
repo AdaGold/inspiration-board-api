@@ -1,4 +1,53 @@
 class BoardsController < ApplicationController
+
+  def homepage
+    render json: {
+      message: 'Welcome to Ada\'s inspiration board',
+      routes: [
+        {
+          method: 'get',
+          path: '/boards'
+        },
+        {
+          method: 'get',
+          path: '/boards/:board_name'
+        },
+        {
+          method: 'post',
+          path: '/boards'
+        },
+        {
+          method: 'patch',
+          path: '/boards/:board_name'
+        },
+        {
+          method: 'delete',
+          path: '/boards/:board_name'
+        },
+        {
+          method: 'get',
+          path: '/boards/:board_name/cards'
+        },
+        {
+          method: 'get',
+          path: '/boards/:board_name/cards/:id'
+        },
+        {
+          method: 'post',
+          path: '/boards/:board_name/cards'
+        },
+        {
+          method: 'patch',
+          path: '/boards/:board_name/cards/:id'
+        },
+        {
+          method: 'delete',
+          path: '/boards/:board_name/cards/:id'
+        }
+      ]
+    }
+  end
+
   def index
     @boards = Board.order(:name)
   end

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root to: 'boards#homepage'
+
   resources :boards, except: [:edit, :new], param: :name do
     resources :cards, except: [:edit, :new]
   end
