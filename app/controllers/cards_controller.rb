@@ -5,10 +5,27 @@ class CardsController < ApplicationController
     @cards = @board.cards
   end
 
+  def create
+    @card = @board.cards.new(card_params)
+
+    unless @card.save
+      render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
+    end
+  end
+
   def show
     @card = Card.find_by(id: params[:id])
     render json: {ok: false, cause: :not_found}, status: :not_found if !@card
 
+  end
+
+  def update
+    @card = Card.find_by(id: params[:id])
+    @card.update(card_params)
+
+    if !@card.valid?
+      render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
+    end
   end
 
   def destroy
@@ -18,23 +35,6 @@ class CardsController < ApplicationController
       @card.destroy
     else
       render json: {ok: false, cause: :not_found}, status: :not_found if @board.nil?
-    end
-  end
-
-  def create
-    @card = @board.cards.new(card_params)
-
-    unless @card.save
-      render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
-    end
-  end
-
-  def update
-    @card = Card.find_by(id: params[:id])
-    @card.update(card_params)
-
-    if !@card.valid?
-      render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
     end
   end
 
