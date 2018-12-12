@@ -22,22 +22,16 @@ This API supports many boards, each of which may have many cards. Each student s
 ## Cards
 
 - **Retrieve list of cards for a single board From Name:** https://inspiration-board.herokuapp.com/boards/Ada-Lovelace/cards
-  - **Note** if a board with the given `board_name` does not exist, it will be created
 - **Add a New Card:**
   - POST https://inspiration-board.herokuapp.com/boards/:board_name/cards
   - accepted params:
     - text (string)
     - emoji (string)
-  - **Note** if a board with the given name does not exist it will be created
-- **Retrieve specific card:** https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
-
-## Update Data
-
+- **Retrieve specific card:** https://inspiration-board.herokuapp.com/cards/:card_id
 - **Update a card**
-  - PATCH https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
-  - text (string)
-  - emoji (string)
-
-## Delete Data
+  - PATCH https://inspiration-board.herokuapp.com/cards/:card_id
+  - accepted params:
+    - text (string)
+    - emoji (string)
 - **Delete a card**
-  - DELETE https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
+  - DELETE https://inspiration-board.herokuapp.com/cards/:card_id
