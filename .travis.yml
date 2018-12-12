@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - 2.4.0
+
+services:
+  - postgresql
+
+before_script:
+  - bin/rails db:create
+  - bin/rails db:migrate
+
+# deploy:
+#   provider: heroku
+#   api_key:
+#     secure: ZfpvG0lKL0k4EigQmiKT0h5BPbhcVvGyWGys3Ny85nQ3qzk0T11L5A7zEoRmCZgyQLmBY/BoBWRDF7t9ItCEUgaCAFmlGc0x/FCFxDuBysMNzrcEgqOXhpBRE7wYL93p5l/sEn2BqK+fzMbWceQjOaaMcKFc969HoyblaY3U/jvBIcHAF1PKe0cpt7U9rSbm+VVWfXxis95cyNU//nsrbE8MIA9uYcMPLfwrUhvMb1nh55Wej2O9i2WXg7hRN6ggcWQg+ockVG91tay+8CDN84+pIwAqHuO5ZCp+/ugVmhy/FcR/BGU/0pg3ccWLZEIBShBkFpIvdKQwry6qPi7jcXl9sKJGQDypEeDKjeC39p9Vm43sL3N2EcO2hIDCwme6JRworehiSwTP5nk3FZtBDU1X6Gzv7kV/xfoPxxT4BiUAO0qlVi9BbU3jUet7epPf44+/V1urCWN5yZskW6mRC4Q3f+yxf10KH078zcFNTFk+yXZrLZtVJC00bLKDTXKflMf+CwjyREFabRWgaYRzg+eEPv4SKPOhtDtRyghilG072cCbbvKx92h7XO8n0Es5wYB7V7MpVIt59VrEJBfo5oPjUabgw6Mc7bXlpDb08x6ScMx6Ixs6LMvxahauRaoR42/zzLh2YFUj3FiZylMv6sckL1XemA/NbeWlLRdyxWQ=
+#   app: inspiration-board-api
