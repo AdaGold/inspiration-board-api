@@ -6,9 +6,6 @@
 
 This API is intended for use with our second React project Ada's Inpiration Board.
 
-## General
-
-
 ## Boards
 
 This API supports many boards, each of which may have many cards. Each student should maintain their own boards. A board is referenced by name (`Grace's-Board`), _not_ by ID.
