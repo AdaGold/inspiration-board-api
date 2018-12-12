@@ -6,27 +6,30 @@
 
 This API is intended for use with our second React project Ada's Inpiration Board.
 
-## Retrieve Data
-  - **Retrieve list of all Boards:** https://inspiration-board.herokuapp.com/boards
+## General
 
-  - **Retrieve list of cards for a single board From Name:** https://inspiration-board.herokuapp.com/boards/Ada-Lovelace/cards
-    - **Note** if a board with the given `board_name` does not exist, it will be created
 
-  - **Retrieve specific card:** https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
+## Boards
 
-## Send Data
+This API supports many boards, each of which may have many cards. Each student should maintain their own boards. A board is referenced by name (`Grace's-Board`), _not_ by ID.
 
-  - **Create a board:**
-    - POST https://inspiration-board.herokuapp.com/boards
-    - accepted params:
-      - name (string)
+- **Retrieve list of all Boards:** https://inspiration-board.herokuapp.com/boards
+- **Create a board:**
+  - POST https://inspiration-board.herokuapp.com/boards
+  - accepted params:
+  - name (string)
 
-  - **Add a New Card:**
-    - POST https://inspiration-board.herokuapp.com/boards/:board_name/cards
-    - accepted params:
-      - text (string)
-      - emoji (string)
-    - **Note** if a board with the given name does not exist it will be created
+## Cards
+
+- **Retrieve list of cards for a single board From Name:** https://inspiration-board.herokuapp.com/boards/Ada-Lovelace/cards
+  - **Note** if a board with the given `board_name` does not exist, it will be created
+- **Add a New Card:**
+  - POST https://inspiration-board.herokuapp.com/boards/:board_name/cards
+  - accepted params:
+    - text (string)
+    - emoji (string)
+  - **Note** if a board with the given name does not exist it will be created
+- **Retrieve specific card:** https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id
 
 ## Update Data
 
@@ -36,7 +39,5 @@ This API is intended for use with our second React project Ada's Inpiration Boar
   - emoji (string)
 
 ## Delete Data
-- **Delete a board, warning destroys all card data for that board**
-  - DELETE https://inspiration-board.herokuapp.com/boards/:board_name
 - **Delete a card**
   - DELETE https://inspiration-board.herokuapp.com/boards/:board_name/cards/:card_id

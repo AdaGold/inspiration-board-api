@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root to: 'boards#homepage'
 
   resources :boards, except: [:edit, :new, :destroy], param: :name do
-    resources :cards, except: [:edit, :new]
+    resources :cards, only: [:index, :create]
   end
+
+  resources :cards, only: [:show, :update, :destroy]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

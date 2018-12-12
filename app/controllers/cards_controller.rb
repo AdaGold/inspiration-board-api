@@ -1,15 +1,8 @@
 class CardsController < ApplicationController
-  def index
-    board = Board.find_by(name: params[:board_name])
-    if board.nil?
-      board = Board.create_new_board(params[:board_name])
-    end
+  before_action :require_board, only: [:index, :create]
 
-    if board
-      @cards = board.cards
-    else
-      render json: {ok: false, cause: :not_found}, status: :not_found
-    end
+  def index
+    @cards = @board.cards
   end
 
   def show
@@ -29,23 +22,15 @@ class CardsController < ApplicationController
   end
 
   def create
-    @card = Card.new(card_params)
+    @card = @board.cards.new(card_params)
 
-    @card.board = Board.find_by(name: params[:board_name])
-    if @card.board.nil?
-      @card.board = Board.create_new_board params[:board_name]
-    end
-
-    @card.save
-
-    if !@card.valid?
+    unless @card.save
       render json: {ok: false, cause: "validation errors", errors: @card.errors}, status: :bad_request
     end
   end
 
   def update
     @card = Card.find_by(id: params[:id])
-    @card.board = Board.find_by(name: params[:board_name])
     @card.update(card_params)
 
     if !@card.valid?
@@ -54,7 +39,16 @@ class CardsController < ApplicationController
   end
 
   private
-    def card_params
-      return params.permit(:text, :emoji)
+  def card_params
+    return params.permit(:text, :emoji)
+  end
+
+  def require_board
+    puts "in require board"
+    @board = Board.find_by(name: params[:board_name])
+    unless @board
+      puts "board not found"
+      render json: {ok: false, cause: "board #{params[:board_name]} does not exist"}, status: :not_found
     end
+  end
 end
