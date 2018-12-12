@@ -61,16 +61,6 @@ class BoardsController < ApplicationController
     render json: {ok: false, cause: :bad_request}, status: :bad_request if @board.nil?
   end
 
-  def destroy
-    @board = Board.find_by(name: params[:name])
-
-    if @board
-      @board.destroy_board
-    else
-      render json: {ok: false, cause: :not_found}, status: :not_found if @board.nil?
-    end
-  end
-
   def create
     @board = Board.create_new_board(board_params[:name])
 
