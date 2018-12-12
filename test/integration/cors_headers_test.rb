@@ -2,7 +2,7 @@ require 'test_helper'
 class CorsHeadersTest < ActionDispatch::IntegrationTest
   test "responses include CORS headers" do
     [host, 'http://localhost:3000', 'null'].each do |host|
-      get '/', headers: {origin: host}
+      get boards_path, headers: {origin: host}
       assert_includes response.headers, 'Access-Control-Allow-Origin'
       assert_equal response.headers['Access-Control-Allow-Origin'], '*'
       assert_includes response.headers, 'Access-Control-Allow-Methods'
