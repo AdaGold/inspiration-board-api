@@ -44,10 +44,8 @@ class CardsController < ApplicationController
   end
 
   def require_board
-    puts "in require board"
     @board = Board.find_by(name: params[:board_name])
     unless @board
-      puts "board not found"
       render json: {ok: false, cause: "board #{params[:board_name]} does not exist"}, status: :not_found
     end
   end
