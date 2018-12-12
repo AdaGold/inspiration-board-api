@@ -27,6 +27,14 @@ describe Board do
       expect(board.cards.length).must_equal 2
     end
 
+    it "removes all related cards when destroyed" do
+      3.times do |i|
+        board.cards.create!(text: "test card #{i}")
+      end
 
+      board.destroy!
+
+      expect(Card.where(board_id: board.id).count).must_equal 0
+    end
   end
 end
