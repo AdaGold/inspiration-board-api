@@ -1,51 +1,7 @@
 class BoardsController < ApplicationController
 
-  def homepage
-    render json: {
-      message: 'Welcome to Ada\'s inspiration board',
-      routes: [
-        {
-          method: 'get',
-          path: '/boards'
-        },
-        {
-          method: 'get',
-          path: '/boards/:board_name'
-        },
-        {
-          method: 'post',
-          path: '/boards'
-        },
-        {
-          method: 'patch',
-          path: '/boards/:board_name'
-        },
-        {
-          method: 'delete',
-          path: '/boards/:board_name'
-        },
-        {
-          method: 'get',
-          path: '/boards/:board_name/cards'
-        },
-        {
-          method: 'get',
-          path: '/boards/:board_name/cards/:id'
-        },
-        {
-          method: 'post',
-          path: '/boards/:board_name/cards'
-        },
-        {
-          method: 'patch',
-          path: '/boards/:board_name/cards/:id'
-        },
-        {
-          method: 'delete',
-          path: '/boards/:board_name/cards/:id'
-        }
-      ]
-    }
+  def root
+    render plain: "Inspiration board API"
   end
 
   def index
@@ -59,16 +15,6 @@ class BoardsController < ApplicationController
     end
 
     render json: {ok: false, cause: :bad_request}, status: :bad_request if @board.nil?
-  end
-
-  def destroy
-    @board = Board.find_by(name: params[:name])
-
-    if @board
-      @board.destroy_board
-    else
-      render json: {ok: false, cause: :not_found}, status: :not_found if @board.nil?
-    end
   end
 
   def create

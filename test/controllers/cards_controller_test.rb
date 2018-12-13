@@ -1,29 +1,39 @@
 require "test_helper"
 
 describe CardsController do
-  let (:board) {boards(:adas)}
+  def check_not_found_response
+    must_respond_with :not_found
 
-  it "should get index" do
-    # Act
-    get board_cards_path(board.name)
-
-    # Assert
-    expect(response).must_be :successful?
     expect(response.header['Content-Type']).must_include 'json'
-
-  end
-
-  it "will create a board if using a board name that doesn't exist" do
-
-    # Act
-    get board_cards_path("pasta")
     body = JSON.parse(response.body)
 
-    # Assert
-    expect(Board.find_by(name: "pasta")).wont_be_nil
-    expect(response.header['Content-Type']).must_include 'json'
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal Board.first.cards.length
+    expect(body["ok"]).must_equal false
+    expect(body).must_include "cause"
+  end
+
+  let (:board) {boards(:adas)}
+
+  describe "index" do
+    it "should get index" do
+      # Act
+      get board_cards_path(board.name)
+
+      # Assert
+      expect(response).must_be :successful?
+      expect(response.header['Content-Type']).must_include 'json'
+
+    end
+
+    it "responds with not_found if the board DNE" do
+      board_name = "board_does_not_exist"
+      expect(Board.find_by(name: board_name)).must_be_nil
+
+      # Act
+      get board_cards_path(board_name)
+
+      # Assert
+      check_not_found_response
+    end
   end
 
   describe "show" do
@@ -32,7 +42,7 @@ describe CardsController do
       card = board.cards.first
 
       # Act
-      get board_card_path(board.name, card.id)
+      get card_path(card.id)
 
       # Assert
       expect(response).must_be :successful?
@@ -44,7 +54,7 @@ describe CardsController do
       card.destroy
 
       # Act
-      get board_card_path(board.name, card.id)
+      get card_path(card.id)
       body = JSON.parse(response.body)
 
       # Assert
@@ -61,7 +71,7 @@ describe CardsController do
 
 
       # Act
-      delete board_card_path(board.name, card.id)
+      delete card_path(card.id)
       body = JSON.parse(response.body)
 
       # Assert
@@ -80,7 +90,7 @@ describe CardsController do
       card.destroy
 
       # Act
-      delete board_card_path(board.name, card.id)
+      delete card_path(card.id)
       body = JSON.parse(response.body)
 
       # Assert
@@ -120,6 +130,7 @@ describe CardsController do
       # Arrange
       card = {
       }
+      expect(Card.new(card)).wont_be :valid?
 
       # Act
       post board_cards_path(board.name), params: card
@@ -136,6 +147,21 @@ describe CardsController do
       expect(body["errors"].keys).must_include "text"
       expect(body["errors"]["text"]).must_include "invalid text or missing emoji"
     end
+
+    it "responds with not_found if the board DNE" do
+      board_name = "board_does_not_exist"
+      expect(Board.find_by(name: board_name)).must_be_nil
+
+      card = {
+        text: "You are totally awesome"
+      }
+
+      # Act
+      post board_cards_path(board_name), params: card
+
+      # Assert
+      check_not_found_response
+    end
   end
 
   describe "update" do
@@ -147,7 +173,7 @@ describe CardsController do
       card_hash = card.as_json
 
       # Act
-      patch board_card_path(board.name, card.id), params: card_hash
+      patch card_path(card.id), params: card_hash
       body = JSON.parse(response.body)
 
       # Assert
@@ -165,7 +191,7 @@ describe CardsController do
       card_hash = card.as_json
 
       # Act
-      patch board_card_path(board.name, card.id), params: card_hash
+      patch card_path(card.id), params: card_hash
       body = JSON.parse(response.body)
 
       # Assert
