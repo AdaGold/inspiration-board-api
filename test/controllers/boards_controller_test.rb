@@ -2,6 +2,11 @@ require "test_helper"
 
 describe BoardsController do
 
+  it 'has a root route' do
+    get root_path
+    must_respond_with :success
+  end
+
   describe "index" do
     before do
       # Act

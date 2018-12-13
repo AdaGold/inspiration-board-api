@@ -1,5 +1,9 @@
 class BoardsController < ApplicationController
 
+  def root
+    render plain: "Inspiration board API"
+  end
+
   def index
     @boards = Board.order(:name)
   end
