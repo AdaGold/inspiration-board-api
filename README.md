@@ -1,6 +1,6 @@
 # Ada's Inspiration Board API
 
-[![Build Status](https://travis-ci.org/Ada-Developers-Academy/inspiration-board-api.svg?branch=master)](https://travis-ci.org/Ada-Developers-Academy/inspiration-board-api)
+[![Build Status](https://travis-ci.org/AdaGold/inspiration-board-api.svg?branch=master)](https://travis-ci.org/AdaGold/inspiration-board-api)
 
 [![Heroku](https://heroku-badge.herokuapp.com/?app=inspiration-board&svg=1)](inspiration-board.herokuapp.com)
 
